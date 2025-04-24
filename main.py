@@ -13,6 +13,9 @@ def __main__():
     #Creating a display screen
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable)
     player  = Player(x=SCREEN_WIDTH/2, y=SCREEN_HEIGHT/2)
 
     #Infinite game loop
@@ -21,7 +24,9 @@ def __main__():
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
-        player.update(dt)
+        updatable.update(dt)
+        for item in drawable:
+            item.draw(screen)
         player.draw(screen)
         pygame.display.flip()
         Clock.tick(60)
