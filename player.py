@@ -10,6 +10,7 @@ class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
+        self.timer = 0
         
 
     
@@ -41,13 +42,21 @@ class Player(CircleShape):
             self.move(-1 * dt)
         if keys[pygame.K_SPACE]:
             self.shot()
+        self.timer -= dt
+        self.timer = max(0, self.timer)
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
     def shot(self):
-        forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        shot_position = self.position + forward * self.radius
-        return Shot(shot_position.x, shot_position.y, SHOT_RADIUS, forward)
-    
+        if self.timer > 0:
+            return
+        else:
+            self.timer = PLAYER_SHOOT_COOLDOWN
+            forward = pygame.Vector2(0, 1).rotate(self.rotation)
+            shot_position = self.position + forward * self.radius
+            new_shot = Shot(shot_position.x, shot_position.y, SHOT_RADIUS, forward * SHOT_SPEED)
+            self.containers[0].add(new_shot)  # Add to the updatable group
+            return new_shot
+        
