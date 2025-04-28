@@ -26,6 +26,7 @@ def __main__():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     asteroid_field = AsteroidField()
+    shoots = pygame.sprite.Group()
     Shot.containers = (updatable, drawable)
 
     #Infinite game loop
@@ -41,6 +42,13 @@ def __main__():
                 if asteroid.collision(player):
                     print("Game over!")
                     sys.exit()
+        #Check for collisions
+        for asteroid in asteroids:
+            for item in updatable:       # or drawable, depending which holds the shots
+                if isinstance(item, Shot):
+                    if item.collision(asteroid):
+                        item.kill()
+                        asteroid.kill()    
         player.draw(screen)
         pygame.display.flip()
         Clock.tick(60)
