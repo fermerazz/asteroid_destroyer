@@ -3,6 +3,9 @@ from constants import *
 from player import *
 from asteroid import Asteroid
 from asteroid_field import AsteroidField
+from circleshape import *
+import sys
+from shot import Shot
 
 def __main__():
     pygame.init()
@@ -23,6 +26,7 @@ def __main__():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     asteroid_field = AsteroidField()
+    Shot.containers = (updatable, drawable)
 
     #Infinite game loop
     while True:
@@ -33,6 +37,10 @@ def __main__():
         updatable.update(dt)
         for item in drawable:
             item.draw(screen)
+            for asteroid in asteroids:
+                if asteroid.collision(player):
+                    print("Game over!")
+                    sys.exit()
         player.draw(screen)
         pygame.display.flip()
         Clock.tick(60)
