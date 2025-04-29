@@ -48,7 +48,7 @@ def __main__():
                 if isinstance(item, Shot):
                     if item.collision(asteroid):
                         item.kill()
-                        asteroid.kill()    
+                        asteroid.split ()    
         player.draw(screen)
         pygame.display.flip()
         Clock.tick(60)
